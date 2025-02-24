@@ -4,8 +4,8 @@
 
 One thing from React I thought was pretty helpful.
 
-> ℹ <br/>
-> 
+> ⚠ TODO<br/>
+> phpdoc has `@uses esc_attr()` but actual code does not; re-implement `esc_attr()` or use in WordPress, which provides `esc_attr()`.
 
 ```php
 /**
