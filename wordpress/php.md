@@ -1,7 +1,7 @@
 # PHP Snippets
 
 See also:
-- [Modern WP config template](wp-config.php)
+- [Modern WP config template](files/wp-config.php)
 
 ## Create new user
 

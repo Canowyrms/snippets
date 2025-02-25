@@ -239,7 +239,7 @@ ffmpeg -y \
 
 ## Remux audio from *.mkv to *.mka
 
-This is a rudimentary solution... For a more robust solution, see [make_mka.sh](make_mka.sh).
+This is a rudimentary solution... For a more robust solution, see [make_mka.sh](files/make_mka.sh).
 
 ```sh
 for file in *.mkv; do \
@@ -302,7 +302,7 @@ done;
 
 ## Batch VMAF comparison
 
-Contents of [batch_vmaf_comparison.sh](batch_vmaf_comparison.sh):
+Contents of [batch_vmaf_comparison.sh](files/batch_vmaf_comparison.sh):
 
 ```sh
 #!/bin/bash
@@ -339,7 +339,7 @@ done
 
 ## Detect certain attachments
 
-Contents of [detect_attachments.sh](detect_attachments.sh):
+Contents of [detect_attachments.sh](files/detect_attachments.sh):
 
 ```sh
 #!/bin/bash
