@@ -251,7 +251,7 @@ ffmpeg -y \
 -attach "${file%.mkv}.jpg" \
 -metadata:s:t "mimetype=image/jpeg" \
 -metadata:s:t "filename=cover.jpg" \
--movflags +faststart
+-movflags +faststart \
 "${file%.mkv}.mka"; \
 done;
 ```
