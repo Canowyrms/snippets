@@ -29,7 +29,7 @@ ffmpeg \
 -map 0:a:4 \
 -c copy \
 -map_metadata 0 \
--movflags +faststart
+-movflags +faststart \
 "out.mka"
 ```
 
@@ -50,7 +50,7 @@ ffmpeg \
 -map 0:a:0 \
 -c:a copy \
 -map_metadata 0 \
--movflags +faststart
+-movflags +faststart \
 "temp/${file}"; \
 done
 ```
@@ -88,7 +88,7 @@ ffmpeg \
 -metadata:s:a:0 "title=" \
 -metadata:s:a:0 "language=eng" \
 -metadata:s:s:0 "language=eng" \
--movflags +faststart
+-movflags +faststart \
 "/g/marked for deletion/out.mkv"
 ```
 
@@ -116,7 +116,7 @@ ffmpeg \
 -map 0 \
 -c copy \
 -map_metadata 0 \
--movflags +faststart
+-movflags +faststart \
 "concatenated.mkv"
 ```
 
@@ -141,7 +141,7 @@ ffmpeg \
 -c:v h264_nvenc \
 -c:a copy \
 -vf fps=1 \
--movflags +faststart
+-movflags +faststart \
 "out.mkv"
 ```
 
@@ -231,7 +231,7 @@ ffmpeg -y \
 -attach "thumb.jpg" \
 -metadata:s:t "mimetype=image/jpeg" \
 -metadata:s:t "filename=cover.jpg" \
--movflags +faststart
+-movflags +faststart \
 "out.mkv"
 ```
 
@@ -293,7 +293,7 @@ ffmpeg -y \
 -metadata:s:a "date=" \
 -metadata:s:a "year=" \
 -metadata:s:a "purl=" \
--movflags +faststart
+-movflags +faststart \
 "${file%.opus}.mka"; \
 done;
 ```
