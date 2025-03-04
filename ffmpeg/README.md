@@ -300,6 +300,34 @@ done;
 
 
 
+## Remux different audio and video sources, preserving metadata
+
+This example has a more complex stream and metadata mapping than other examples.
+
+```sh
+ffmpeg -y \
+-i "in.mkv" \
+-i "in.mka" \
+-map 0:v \
+-map 1:a:1 \
+-map 0:s \
+-c copy \
+-map_metadata 0 \
+-map_metadata:s:a:0 1:s:a:1 \
+-map_metadata:s:s:0 0:s:s:0 \
+-movflags +faststart \
+"out.mkv"
+```
+
+- -map 0:v <br/> Video tracks from input 0.
+- -map 1:a:1 <br/> Audio track 1 from input 1.
+- -map 0:s <br/> Subtitle tracks from input 0.
+- `map_metadata 0` <br/> Should copy global and video track metadata from input 0.
+- `map_metadata:s:a:0 1:s:a:1` <br/> Maps metadata from input 1, stream selection > audio track 1 to output, stream selection > audio track 0.
+- `map_metadata:s:s:0 0:s:s:0` <br/> Maps metadata from input 0, stream selection > subtitle track 0 to output, stream selection > subtitle track 0.
+
+
+
 ## Batch VMAF comparison
 
 Contents of [batch_vmaf_comparison.sh](files/batch_vmaf_comparison.sh):
