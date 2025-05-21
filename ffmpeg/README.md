@@ -407,3 +407,36 @@ ffmpeg -y \
 -c:v hevc_nvenc \
 "output.mkv"
 ```
+
+## Trim and scale video, re-encoding (10-bit H265 to 8-bit H264)
+
+Was using this as part of a workflow to clip a title/credit sequence from an H265 source.
+
+Sometimes we need exact segments (i.e. start and end times), and to avoid black frames before/after, we can re-encode.
+
+```sh
+ffmpeg -i "h265_10bit_input.mkv" \
+-map 0 \
+-ss "00:00:02.112" -to "00:01:17.060" \
+-c:v h264_nvenc -pix_fmt yuv420p -preset p7 -profile high \
+-vf scale=1280:-2 \
+-c:a libopus -b:a 320k \
+-af "channelmap=channel_layout=5.1" \
+-movflags +faststart \
+"output.720p.h264.mp4"
+```
+
+Optional swaps:
+
+```sh
+# H265 NVENC 10,000Kbps
+-c:v hevc_nvenc -preset slow -profile:v main10 -rc vbr -b:v 10000k -maxrate 13000k -bufsize 20000k -temporal-aq 1 -spatial-aq 1 -rc-lookahead 98 -2pass true -multipass 2 \
+# Downmix audio to stereo; don't use -af flag if using this.
+-c:a libopus -b:a 120k -ac 2 \
+```
+
+- `-ss "00:00:02.112" -to "00:01:17.060"` <br/> **S**pecific **S**egment from in_time to out_time; can quickly get values from LosslessCut.
+- `-c:v h264_nvenc -pix_fmt yuv420p` <br/> Converts down to 8-bit colour format (H264 doesn't support 10-bit).
+- `-vf scale=1280:-2` <br/> Scale video down, maintaining aspect ratio. `-1` may work, but some codecs require height or width to be a multiple of `n`, in which case, `-2` works (see: https://trac.ffmpeg.org/wiki/Scaling#KeepingtheAspectRatio).
+- `-c:a libopus -b:a 320k` <br/> Re-encode audio into opus format for space efficiency.
+- `-af "channelmap=channel_layout=5.1"` <br/> Opus doesn't automatically remap channels, so if input media is 5.1, pass this in manually (see: https://trac.ffmpeg.org/ticket/5718).
