@@ -408,6 +408,8 @@ ffmpeg -y \
 "output.mkv"
 ```
 
+
+
 ## Trim and scale video, re-encoding (10-bit H265 to 8-bit H264)
 
 Was using this as part of a workflow to clip a title/credit sequence from an H265 source.
@@ -440,3 +442,27 @@ Optional swaps:
 - `-vf scale=1280:-2` <br/> Scale video down, maintaining aspect ratio. `-1` may work, but some codecs require height or width to be a multiple of `n`, in which case, `-2` works (see: https://trac.ffmpeg.org/wiki/Scaling#KeepingtheAspectRatio).
 - `-c:a libopus -b:a 320k` <br/> Re-encode audio into opus format for space efficiency.
 - `-af "channelmap=channel_layout=5.1"` <br/> Opus doesn't automatically remap channels, so if input media is 5.1, pass this in manually (see: https://trac.ffmpeg.org/ticket/5718).
+
+
+
+## Apply filters to an audio track before combining multiple tracks into a single track
+
+In one of my D&D recordings, my mic had fallen back to a more basic processing chip, something to that effect. Windows usually detects the mic as a Yeti Blue, but this time, the mic was recognized as a generic mic. That is the long way to say, it sounded like garbage, and was extremely loud at times.
+
+This snippet demonstrates applying an audio filter to one track before merging it with another for final output.
+
+```sh
+ffmpeg -i "input.mkv" \
+-filter_complex "[0:a:2]acompressor=threshold=0.05:ratio=10:attack=200:release=1000[mic]; \
+[0:a:4][mic]amix=inputs=2[aout]" \
+-map "[aout]" \
+-c:a libopus \
+-b:a 320k \
+-map_metadata 0 \
+-movflags +faststart \
+"out.fixed.mka"
+```
+
+- `-filter_complex "[0:a:2]...[mic]"` <br/> Selects the 3rd audio track (0-indexed) for filtering; maps result to "mic" for subsequent operations.
+- `[0:a:4][mic]amix=inputs=2[aout]` <br/> Selects the 5th audio track (0-indexed) and the "mic" track from previous step for filtering; maps result to "aout" for subsequent operations.
+- `-map "[aout]"` <br/> Select "aout" track from previous step for output.
