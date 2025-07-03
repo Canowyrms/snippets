@@ -466,3 +466,31 @@ ffmpeg -i "input.mkv" \
 - `-filter_complex "[0:a:2]...[mic]"` <br/> Selects the 3rd audio track (0-indexed) for filtering; maps result to "mic" for subsequent operations.
 - `[0:a:4][mic]amix=inputs=2[aout]` <br/> Selects the 5th audio track (0-indexed) and the "mic" track from previous step for filtering; maps result to "aout" for subsequent operations.
 - `-map "[aout]"` <br/> Select "aout" track from previous step for output.
+
+
+
+## Combine audio tracks of varying length, aligned to the end
+
+In the situation you have two or more audio tracks of different lengths, and want to pad the front of the audio so they all end at the same time, we can figure out the offset (in ms) and pad the audio in a `filter_complex` step.
+
+Get the offset:
+
+```sh
+ffprobe -i "a1.mka" -show_entries format=duration -v quiet -of csv="p=0"
+ffprobe -i "a2.mka" -show_entries format=duration -v quiet -of csv="p=0"
+```
+
+Subtract the shorter from the longer, and take note of the number. I believe the output format here is `X.YYY`, where `X` is seconds, and `YYY` is ms. The `adelay` filter accepts ms, not sure if it accepts seconds.
+
+```sh
+ffmpeg \
+-i "a1.mka" \
+-i "a2.mka" \
+-filter_complex " \
+[0]adelay=750|750[padded]; \
+[padded][1]amix=inputs=2:duration=longest" \
+"out.mp3"
+```
+
+- `[0]...[padded]` <br/> Selects the first input (0-indexed) for filtering; maps result to "padded" for subsequent operations.
+- `adelay=750|750` <br/> Adds 750ms of delay to the front of the current audio item being filtered.
