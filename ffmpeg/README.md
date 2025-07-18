@@ -494,3 +494,19 @@ ffmpeg \
 
 - `[0]...[padded]` <br/> Selects the first input (0-indexed) for filtering; maps result to "padded" for subsequent operations.
 - `adelay=750|750` <br/> Adds 750ms of delay to the front of the current audio item being filtered.
+
+
+
+## Clip a segment to MP3
+
+Mostly used for quickly extracting funnies from longer session recordings.
+
+```sh
+ffmpeg -y \
+-i "in.mkv" \
+-map 0:a:0 -map_metadata 0 \
+-ss "hh:mm:ss.000" -to "hh:mm:ss.000" \
+"funny.mp3"
+```
+
+- `-ss "00:00:02.112" -to "00:01:17.060"` <br/> **S**pecific **S**egment from in_time to out_time; can quickly get values from LosslessCut.
