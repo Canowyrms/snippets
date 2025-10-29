@@ -42,3 +42,28 @@ function className (array $classes) : string {
 	);
 }
 ```
+
+
+## 'jsonify' output, debug it in javascript console
+
+Mostly used this for debugging Twig/Timber context objects, because that was just easier to do in the browser's js console. Can easily be adapted for any kind of object/array.
+
+```php
+?>
+<pre class="jsonify" data-name="something-useful"><?php
+	echo esc_html(json_encode($context));
+?></pre>
+```
+
+```js
+document.querySelectorAll('.jsonify')?.forEach((element, index) => {
+	let name = element.getAttribute('data-name') ?? `#${index}`;
+
+	console.log(`JSONIFY | ${name}:`);
+	try {
+		console.log(JSON.parse(element.textContent));
+	} catch (error) {
+		console.warn(`JSONIFY | ${name} could not be parsed.`);
+	}
+});
+```
