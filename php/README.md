@@ -54,6 +54,29 @@ Mostly used this for debugging Twig/Timber context objects, because that was jus
 <pre class="jsonify" data-name="something-useful"><?php
 	echo esc_html(json_encode($context));
 ?></pre>
+
+
+/**
+ * JSONIFY PHP Function. Converts PHP objects/arrays to JSON and outputs the results to the DOM.
+ * 
+ * @param $data PHP array or object.
+ * @param string $name Meaningful name of what we're JSONIFY-ing.
+ * 
+ * @return string The completed markup.
+ */
+function jsonify ( $data, string $name ) {
+	ob_start();
+
+	?>
+	<pre class="jsonify" data-name="<?php echo $name; ?>"><?php
+		echo esc_html( json_encode( $data ) );
+	?></pre>
+	<?php
+
+	$output = ob_get_clean();
+
+	return $output;
+}
 ```
 
 ```js
