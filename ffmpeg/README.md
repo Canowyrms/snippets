@@ -510,3 +510,28 @@ ffmpeg -y \
 ```
 
 - `-ss "00:00:02.112" -to "00:01:17.060"` <br/> **S**pecific **S**egment from in_time to out_time; can quickly get values from LosslessCut.
+
+
+
+## List certain properties of certain tracks; JSON output via `jq`
+
+```sh
+for file in *.mkv; do
+	echo "📄 ${file}"
+
+	# Limited to audio tracks only.
+	ffprobe -v quiet -print_format json -show_streams "${file}" | jq -c '.streams[] | select(.codec_type == "audio") | {index, title: .tags.title}'
+
+	echo ""
+done
+```
+
+Example output:
+
+```log
+📄 2025-10-29.mkv
+{"index":1,"title":"Main (Game, Mic, Music, Discord)"}
+{"index":2,"title":"Mic"}
+{"index":3,"title":"Discord"}
+{"index":4,"title":"Desktop"}
+```
