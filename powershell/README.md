@@ -30,3 +30,13 @@ foreach ($file in $mp4Files) {
 	Write-Host ""
 }
 ```
+
+
+
+## Strip all \*.flac files in a directory (recursive) of the `description` and `comment` metadata tags
+
+Requires [metaflac](https://xiph.org/flac/documentation_tools_metaflac.html).
+
+```powershell
+Get-ChildItem -Path "D:\Music\" -Recurse -Filter *.flac | ForEach-Object { metaflac --remove-tag="description" --remove-tag="Comment" "$($_.FullName)" }
+```
