@@ -1,5 +1,15 @@
 # Scoop Snippets
 
+## Enable sqlite cache
+
+This should honestly be the default. `scoop search` and `scoop shim` are significantly faster with this enabled:
+
+```powershell
+scoop config use_sqlite_cache true
+```
+
+
+
 ## Going beyond basic executables with shims
 
 Scoop shims are flexible - you can create shims to run custom commands - kind of like bash aliases, but shell-agnostic.
